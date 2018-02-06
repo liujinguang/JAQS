@@ -575,7 +575,7 @@ class DataView(object):
         """
         Query data using different APIs, then store them in dict.
         period, start_date and end_date are fixed.
-        Keys of dict are securitites.
+        Keys of dict are securities.
         
         Parameters
         ----------
@@ -1260,6 +1260,7 @@ class DataView(object):
         data_to_store = {'data_d': self.data_d, 'data_q': self.data_q,
                          'data_benchmark': self.data_benchmark, 'data_inst': self.data_inst}
         data_to_store = {k: v for k, v in data_to_store.items() if v is not None}
+        print(data_to_store)
         meta_data_to_store = {key: self.__dict__[key] for key in self.meta_data_list}
 
         print("\nStore data...")

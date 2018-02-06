@@ -17,16 +17,21 @@ from jaqs.trade import (AlphaStrategy, AlphaBacktestInstance, AlphaTradeApi,
                         PortfolioManager, AlphaLiveTradeInstance, RealTimeTradeApi)
 import jaqs.trade.analyze as ana
 
-data_config = {
-    "remote.data.address": "tcp://data.tushare.org:8910",
-    "remote.data.username": "YourTelephoneNumber",
-    "remote.data.password": "YourToken"
-}
-trade_config = {
-    "remote.trade.address": "tcp://gw.quantos.org:8901",
-    "remote.trade.username": "YourTelephoneNumber",
-    "remote.trade.password": "YourToken"
-}
+from config_path import DATA_CONFIG_PATH, TRADE_CONFIG_PATH
+
+# data_config = {
+#     "remote.data.address": "tcp://data.tushare.org:8910",
+#     "remote.data.username": "YourTelephoneNumber",
+#     "remote.data.password": "YourToken"
+# }
+# trade_config = {
+#     "remote.trade.address": "tcp://gw.quantos.org:8901",
+#     "remote.trade.username": "YourTelephoneNumber",
+#     "remote.trade.password": "YourToken"
+# }
+
+data_config = jutil.read_json(DATA_CONFIG_PATH)
+trade_config = jutil.read_json(TRADE_CONFIG_PATH)
 
 # Data files are stored in this folder:
 dataview_store_folder = '../../output/simplest/dataview'
@@ -34,7 +39,7 @@ dataview_store_folder = '../../output/simplest/dataview'
 # Back-test and analysis results are stored here
 backtest_result_folder = '../../output/simplest'
 
-UNIVERSE = '000807.SH'
+UNIVERSE = '000807.SH'   #投资范围(universe)：中证申万食品饮料指数 000807.SH的所有成份股
 
 
 def save_data():
@@ -44,9 +49,9 @@ def save_data():
 
     """
     dataview_props = {# Start and end date of back-test
-                      'start_date': 20170101, 'end_date': 20171030,
+                      'start_date': 20170101, 'end_date': 20171231,
                       # Investment universe and performance benchmark
-                      'universe': UNIVERSE, 'benchmark': '000300.SH',
+                      'universe': UNIVERSE, 'benchmark': '000300.SH',   #业绩比较基准(benchmark)：沪深300指数 000300.SH
                       # Data fields that we need
                       'fields': 'total_mv,turnover',
                       # freq = 1 means we use daily data. Please do not change this.
@@ -150,8 +155,8 @@ if __name__ == "__main__":
     
     if is_backtest:
         save_data()
-        do_backtest()
-        analyze_backtest_results()
+#         do_backtest()
+#         analyze_backtest_results()
     else:
         save_data()
         do_livetrade()

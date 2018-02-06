@@ -34,6 +34,8 @@ def test_data_api():
     print(df.columns)
     assert df.shape == (240, 15)
     
+    print(df)
+    
     print("test passed")
     
 

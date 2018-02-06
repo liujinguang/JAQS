@@ -16,10 +16,12 @@ def test_align():
     ds.init_from_config(data_config)
     raw, msg = ds.query_lb_fin_stat('income', '600000.SH', 20151225, 20170501, 'oper_rev')
     assert msg == '0,'
+#     print(raw)
     
     idx_list = ['report_date', 'symbol']
     raw_idx = raw.set_index(idx_list)
     raw_idx.sort_index(axis=0, level=idx_list, inplace=True)
+    print(raw_idx)
     
     df_ann = raw_idx.loc[pd.IndexSlice[:, :], 'ann_date']
     df_ann = df_ann.unstack(level=1)

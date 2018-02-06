@@ -30,6 +30,7 @@ def save_dataview():
     dv.prepare_data()
 
     trade_status = dv.get_ts('trade_status')
+    print(trade_status)
     mask_sus = trade_status == '停牌'
     dv.append_df(mask_sus, 'suspended', is_quarterly=False)
 
@@ -75,4 +76,4 @@ def simple_test_signal():
 
 if __name__ == "__main__":
     save_dataview()
-    simple_test_signal()
+#     simple_test_signal()

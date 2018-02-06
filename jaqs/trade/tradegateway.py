@@ -1009,7 +1009,8 @@ class OrderBook(object):
         elif (freq == common.QUOTE_TYPE.MIN
               or freq == common.QUOTE_TYPE.FIVEMIN
               or freq == common.QUOTE_TYPE.QUARTERMIN
-              or freq == common.QUOTE_TYPE.SPECIALBAR):
+              or freq == common.QUOTE_TYPE.SPECIALBAR
+              or freq == common.QUOTE_TYPE.THREESEC):
             return self._make_trade_bar(quote)
         
         elif freq == common.QUOTE_TYPE.DAILY:

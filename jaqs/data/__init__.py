@@ -9,7 +9,8 @@ from .dataapi import DataApi
 from .dataservice import RemoteDataService, DataService
 from .dataview import DataView, EventDataView
 from .py_expression_eval import Parser
+#from .tick2bar import get_tick_bar
 
-
+#, 'get_tick_bar'
 # we do not expose align and basic
 __all__ = ['DataApi', 'DataService', 'RemoteDataService', 'DataView', 'Parser', 'EventDataView']

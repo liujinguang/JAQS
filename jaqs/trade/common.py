@@ -33,9 +33,12 @@ class ReprStrEnum(str, ReprEnum):
 @unique
 class QUOTE_TYPE(ReprStrEnum):
     TICK = '0'
+    THREESEC = '3S'
     MIN = '1M'
     FIVEMIN = '5M'
     QUARTERMIN = '15M'
+    THIRTYMIN = '30M'
+    SIXTYMIN = '60M'
     DAILY = '1d'
     SPECIALBAR = '-1'
     # %Y%m%d%H%M%S

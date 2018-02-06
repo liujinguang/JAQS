@@ -28,7 +28,7 @@ class Strategy(with_metaclass(abc.ABCMeta)):
     ctx : Context object
         Used to store relevant context of the strategy.
     run_mode : int
-        Whether the trategy is under back-testing or live trading.
+        Whether the strategy is under back-testing or live trading.
     pm : trade.PortfolioManger
         Responsible for managing orders, trades and positions.
     store : dict

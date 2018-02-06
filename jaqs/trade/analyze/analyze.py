@@ -82,7 +82,7 @@ class BaseAnalyzer(object):
     Attributes
     ----------
     _trades : pd.DataFrame
-        Raw trading records, inluding fill_price, fill_time, fill_size, etc.
+        Raw trading records, including fill_price, fill_time, fill_size, etc.
     _configs : dict
         Configuration read from file.
     data_api : BaseDataServer

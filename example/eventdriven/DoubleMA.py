@@ -13,16 +13,21 @@ from jaqs.trade import (model, EventLiveTradeInstance, EventBacktestInstance, Re
 import jaqs.trade.analyze as ana
 import jaqs.util as jutil
 
-data_config = {
-  "remote.data.address": "tcp://data.tushare.org:8910",
-  "remote.data.username": "YourTelephone",
-  "remote.data.password": "YourToken"
-}
-trade_config = {
-  "remote.trade.address": "tcp://gw.quantos.org:8901",
-  "remote.trade.username": "YourTelephone",
-  "remote.trade.password": "YourToken"
-}
+# data_config = {
+#   "remote.data.address": "tcp://data.tushare.org:8910",
+#   "remote.data.username": "YourTelephone",
+#   "remote.data.password": "YourToken"
+# }
+# trade_config = {
+#   "remote.trade.address": "tcp://gw.quantos.org:8901",
+#   "remote.trade.username": "YourTelephone",
+#   "remote.trade.password": "YourToken"
+# }
+
+from config_path import DATA_CONFIG_PATH, TRADE_CONFIG_PATH
+
+data_config = jutil.read_json(DATA_CONFIG_PATH)
+trade_config = jutil.read_json(TRADE_CONFIG_PATH)
 
 result_dir_path = '../../output/double_ma'
 is_backtest = True
@@ -173,12 +178,12 @@ def run_strategy():
         回测模式
         """
         props = {"symbol": '600519.SH',
-                 "start_date": 20170101,
-                 "end_date": 20171104,
-                 "fast_ma_length": 5,
-                 "slow_ma_length": 15,
-                 "bar_type": "1d",  # '1d'
-                 "init_balance": 50000}
+                 "start_date": 20171128,
+                 "end_date": 20171130,
+                 "fast_ma_length": 15,
+                 "slow_ma_length": 30,
+                 "bar_type": "3S",  # '1d'
+                 "init_balance": 500000}
 
         tapi = BacktestTradeApi()
         ins = EventBacktestInstance()
@@ -189,7 +194,7 @@ def run_strategy():
         """
         props = {'symbol': '600519.SH',
                  "fast_ma_length": 5,
-                 "slow_ma_length": 15,
+                 "slow_ma_length": 10,
                  'strategy.no': 1062}
         tapi = RealTimeTradeApi(trade_config)
         ins = EventLiveTradeInstance()

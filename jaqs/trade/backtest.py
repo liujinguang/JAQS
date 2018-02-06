@@ -19,6 +19,9 @@ from jaqs.data.basic import Bar
 from jaqs.data.basic import Trade
 import jaqs.util as jutil
 from functools import reduce
+from jedi.debug import _start_time
+
+from jaqs.data.tick2bar import get_tick_bar
 
 
 def generate_cash_trade_ind(symbol, amount, date, time=200000):
@@ -703,11 +706,22 @@ class EventBacktestInstance(BacktestInstance):
                                               fields='open,high,low,close,volume,oi,trade_date,date,time',
                                               data_format='long')
         elif self.ctx.data_api is not None:
-            df_quotes, _ = self.ctx.data_api.bar(symbol=symbols,
-                                                   start_time=200000, end_time=160000, trade_date=date,
-                                                   freq=self.bar_type)
+            if self.bar_type == common.QUOTE_TYPE.THREESEC:
+                df_quotes = get_tick_bar(symbol=symbols,
+                                         start_time=200000, end_time=160000, trade_date=date,
+                                         freq=self.bar_type)
+            else:
+                df_quotes, _ = self.ctx.data_api.bar(symbol=symbols,
+                                                     start_time=200000, end_time=160000, trade_date=date,
+                                                     freq=self.bar_type)
         else:
             raise ValueError()
+        
+        print('*' * 80)
+        print(symbols, ",", type(date), ',', self.bar_type)
+        
+        print(df_quotes)
+        print('*' * 80)        
         
         return df_quotes
             
@@ -744,6 +758,8 @@ class EventBacktestInstance(BacktestInstance):
     def _run_bar(self):
         """Quotes of different symbols will be aligned into one dictionary."""
         trade_dates_arr = self.ctx.data_api.query_trade_dates(self.start_date, self.end_date)
+#         print('*' * 80)
+#         print(trade_dates_arr)
 
         last_trade_date = trade_dates_arr[0]
         for trade_date in trade_dates_arr:
@@ -751,6 +767,7 @@ class EventBacktestInstance(BacktestInstance):
             self.on_new_day(trade_date)
             
             list_of_quotes_tuples = self._create_time_symbol_bars(trade_date)
+#             print(list_of_quotes_tuples)
             for time, quotes_dic in list_of_quotes_tuples:
                 self._process_quote_bar(quotes_dic)
             
@@ -856,9 +873,10 @@ class EventBacktestInstance(BacktestInstance):
         
         elif (self.bar_type == common.QUOTE_TYPE.MIN
               or self.bar_type == common.QUOTE_TYPE.FIVEMIN
-              or self.bar_type == common.QUOTE_TYPE.QUARTERMIN):
+              or self.bar_type == common.QUOTE_TYPE.QUARTERMIN
+              or self.bar_type == common.QUOTE_TYPE.THREESEC):
             self._run_bar()
-        
+       
         else:
             raise NotImplementedError("bar_type = {}".format(self.bar_type))
         
