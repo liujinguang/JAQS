@@ -538,7 +538,7 @@ class BaseAnalyzer(object):
         df_pnl = df_pnl.sum(axis=1)
         df_pnl = df_pnl.unstack(level=1)
         '''
-        
+        print(self.daily)
         daily = self.daily.loc[:, cols]
         daily = daily.stack().unstack('symbol')
         
@@ -690,6 +690,7 @@ class BaseAnalyzer(object):
         self.get_daily()
         print("calc strategy return...")
         self.get_returns(consider_commission=True)
+        print("done")
 
         if len(selected_sec) > 0:
             print("Plot single securities PnL")

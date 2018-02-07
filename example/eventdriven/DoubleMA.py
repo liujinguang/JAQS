@@ -126,6 +126,7 @@ class DoubleMaStrategy(EventDrivenStrategy):
             - Bar类型 (在bar回测中，为分钟或日数据)
         我们通过isinsance()函数判断quote是Quote类型还是Bar类型
         """
+        print(quote_dic)
         quote = quote_dic.get(self.symbol)
         if isinstance(quote, Quote):
             # 如果是Quote类型，mid为bidprice和askprice的均值
@@ -184,6 +185,22 @@ def run_strategy():
                  "slow_ma_length": 30,
                  "bar_type": "3S",  # '1d'
                  "init_balance": 500000}
+        
+#         props = {"symbol": '600519.SH',
+#                  "start_date": 20171201,
+#                  "end_date": 20171231,
+#                  "fast_ma_length": 10,
+#                  "slow_ma_length": 20,
+#                  "bar_type": "15M",  # '1d'
+#                  "init_balance": 500000}        
+        
+#         props = {"symbol": '600519.SH',
+#                  "start_date": 20170101,
+#                  "end_date": 20171231,
+#                  "fast_ma_length": 5,
+#                  "slow_ma_length": 10,
+#                  "bar_type": "1d",  # '1d'
+#                  "init_balance": 500000}        
 
         tapi = BacktestTradeApi()
         ins = EventBacktestInstance()

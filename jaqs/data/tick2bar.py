@@ -14,6 +14,8 @@ import pandas as pd
 import numpy as np
 
 from pandas.core.indexes.range import RangeIndex
+from statsmodels.discrete.tests.test_sandwich_cov import filepath
+
 
 def load_and_merge_ticks(file_path, freq='3s'):
     '''
@@ -38,13 +40,19 @@ def load_and_merge_ticks(file_path, freq='3s'):
     data = data[data.index.time > datetime.time(9, 30)].fillna(method='pad')
     data = pd.concat([data_before_open, data])
     
-    #reset the time columns according the latest index
-    data['time'] = data.index.to_series().apply(lambda x: int("%02d%02d%02d000" % (x.hour, x.minute, x.second)))
-    data['date'] = data['date'].apply(lambda x : int(x))
+    # reset the time columns according the latest index
+    # data['time'] = data.index.to_series().apply(lambda x: int("%02d%02d%02d000" % (x.hour, x.minute, x.second)))
+    data['time'] = data.index.to_series().apply(lambda x: int("%02d%02d%02d00" % (x.hour, x.minute, x.second)))
+    try:
+        data['date'] = data['date'].apply(lambda x : int(x))
+    except ValueError:
+        print(filepath)
+        exit(0)
     
     data.index = RangeIndex(start=0, stop=len(data))
     
     return data
+
 
 def ticks2bar(tk_data, freq='3s'):
     '''
@@ -52,7 +60,7 @@ def ticks2bar(tk_data, freq='3s'):
     tk_data['freq'] = freq
     tk_data['settle'] = np.nan
     tk_data['open'] = np.nan
-    tk_data = pd.DataFrame(tk_data[tk_data['time'] >= 93000000])
+    tk_data = pd.DataFrame(tk_data[tk_data['time'] >= 9300000])
     tk_data.reset_index(inplace=True)
     
     volume_diff = tk_data['volume'].diff(periods=1)
@@ -64,18 +72,18 @@ def ticks2bar(tk_data, freq='3s'):
     tk_data['turnover'] = turnover_diff
     
     tk_data['vwap'] = tk_data['turnover'] / tk_data['volume']
-    
         
 #     print(pd_stock[['volume', 'turnover', 'vwap', 'open', 'last']])
     
-    tk_data = tk_data[['last', 'code', 'date', 'freq', 'high', 'low', 
-                                   'iopv', 'open', 'settle', 'symbol', 'time', 
+    tk_data = tk_data[['last', 'code', 'date', 'freq', 'high', 'low',
+                                   'iopv', 'open', 'settle', 'symbol', 'time',
                                    'turnover', 'volume', 'vwap']]
-    tk_data.columns = ['close', 'code', 'date', 'freq', 'high', 'low', 
+    tk_data.columns = ['close', 'code', 'date', 'freq', 'high', 'low',
                                   'io', 'open', 'settle', 'symbol', 'time',
                                   'turnover', 'volume', 'vwap']    
     
     return tk_data
+
 
 def get_tick_bar(symbol, start_time, end_time, trade_date, freq='3s'):
     '''
@@ -90,7 +98,6 @@ def get_tick_bar(symbol, start_time, end_time, trade_date, freq='3s'):
     file_path = '../../data/' + file_name
     
     return ticks2bar(load_and_merge_ticks(file_path, freq), freq)
-    
     
 
 if __name__ == '__main__':
